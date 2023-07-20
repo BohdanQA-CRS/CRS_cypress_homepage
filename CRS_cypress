@@ -1,0 +1,56 @@
+/// <reference types="cypress" />
+
+import { faker } from '@faker-js/faker';
+
+Cypress.on('uncaught:exception', (err, runnable) => {
+    return false;
+  });
+
+    const comapanyName = faker.company.bs() + '.com';
+    const userName = faker.name.firstName();
+    const userEmail = userName + '@gmail.com';
+
+  describe('Homepage pop-ups', () => {
+    beforeEach(() => {
+        cy.visit('/')
+    });
+  
+
+  it('Pop up at the top successful', () => {
+
+    cy.wait(6000)
+    cy.get('.header__input').type(comapanyName);
+    cy.get('input[value="Schedule a conversion optimization consultation"]').click();
+    cy.findByName('first_name_front').eq(5).type(userName);
+    cy.findByName('email_front').eq(4).type(userEmail);
+    cy.get('input[value="Schedule a consultation"]').eq(4).click();
+    cy.get('#popupFrame1').should('exist');
+
+  })
+
+
+  it('Pop up on the right side successful', () => {
+
+    cy.wait(5000)
+    cy.get('.start_box > .btn').trigger("click");
+    cy.findByName('first_name_case').type(userName);
+    cy.findByName('email_case').type(userEmail);
+    cy.findByName('your-url_case').type(comapanyName);
+    cy.get('[value="Schedule a consultation"]').eq(4).click();
+    cy.get('#popupFrame1').should('exist');
+
+    });
+
+
+  it('Pop up at the bottom successful', () => {
+
+    cy.wait(4000);
+    cy.get('[class="btn_orange get_free_cro_front"]').trigger("click")
+    cy.findByName('first_name_front').eq(5).type(userName);
+    cy.findByName('email_front').eq(4).type(userEmail);
+    cy.findByName('your-url_front').eq(5).type(comapanyName);
+    cy.get('[value="Schedule a consultation"]').eq(4).click();
+    cy.get('#popupFrame1').should('exist');
+
+  });
+});
